@@ -80,6 +80,7 @@ function Court({ onSceneChange }) {
         document.body.appendChild(VRButton.createButton(gl))
       }}
       onMouseMove={(e) => (mouse.current = getMousePos(e))}
+
       shadows>
       <fog attach="fog" args={['purple', 0, 130]} />
       <ambientLight intensity={0.1} />
