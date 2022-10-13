@@ -188,14 +188,9 @@ function Court({ onSceneChange }) {
         background
       />
       <BakeShadows />
-      <Text fontSize={2} position={[0.2, 5, -1.3]}>
+      <Text fontSize={2} position={[0.2, 5, -3]}>
         Healthify Studio
       </Text>
-      {counter <= 10 && counter !== 0 && (
-        <Text fontSize={2} position={[0, 10, -10]} color="white">
-          {counter}
-        </Text>
-      )}
       {!showExercise && (
         <Text
           onPointerOver={() => setHoverStartExercise(true)}
@@ -214,7 +209,7 @@ function Court({ onSceneChange }) {
             onPointerOver={() => setHoverJumpRope(true)}
             onPointerOut={() => setHoverJumpRope(false)}
             fontSize={0.8}
-            position={[-6, 3, -1]}
+            position={[-6, 2, -1]}
             scale={hoverJumpRope ? [1.2, 1.2, 1.2] : [1, 1, 1]}
             onClick={(e) => handleAnimationSelection("jumprope")}
           >
@@ -224,7 +219,7 @@ function Court({ onSceneChange }) {
             onPointerOver={() => setHoverDance(true)}
             onPointerOut={() => setHoverDance(false)}
             fontSize={0.8}
-            position={[0, 3, -1]}
+            position={[0, 2, -1]}
             scale={hoverDance ? [1.2, 1.2, 1.2] : [1, 1, 1]}
             onClick={(e) => handleAnimationSelection("dance")}
           >
@@ -234,7 +229,7 @@ function Court({ onSceneChange }) {
             onPointerOver={() => setHoverJump(true)}
             onPointerOut={() => setHoverJump(false)}
             fontSize={0.8}
-            position={[6, 3, -1]}
+            position={[6, 2, -1]}
             scale={hoverJump ? [1.2, 1.2, 1.2] : [1, 1, 1]}
             onClick={(e) => handleAnimationSelection("jump")}
           >
@@ -243,7 +238,9 @@ function Court({ onSceneChange }) {
         </>
       )}
       {counter <= 10 && counter !== 0 && (
-        <Text fontSize={1} position={[0, 3, -1]} color="white">
+        <Text fontSize={1}
+          position={[0, 2, -1]}
+          color="white">
           {counter}
         </Text>
       )}
@@ -256,8 +253,8 @@ function Court({ onSceneChange }) {
         <Stacy
           animation={animation}
           mouse={mouse}
-          position={[0, -1.6, 2]}
-          scale={[0.014, 0.014, 0.014]}
+          position={[0, -1.6, 1]}
+          scale={[0.012, 0.012, 0.012]}
         />
       )}
     </Canvas>
