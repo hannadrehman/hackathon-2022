@@ -10,6 +10,7 @@ import {
   Environment,
   BakeShadows,
   useGLTF,
+  Stars
 } from "@react-three/drei";
 import { useControls } from "leva";
 import { Stacy } from "./scenes/Stacy";
@@ -55,10 +56,10 @@ function ExcerciseSelector({ onAnimationChange, animation }) {
 }
 
 function Field({ onSceneChange }) {
+  const d = 8.25
   const mouse = useRef({ x: 0, y: 0 });
   const [animation, setAnimation] = useState("idle");
-  const env =
-    "https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/2k/evening_road_01_2k.hdr";
+
   return (
     <Canvas
       vr
@@ -67,16 +68,33 @@ function Field({ onSceneChange }) {
       }}
       onMouseMove={(e) => (mouse.current = getMousePos(e))}
       shadows
-      camera={{ position: [0, 0, 12], fov: 30 }}
+      shadowMap
+      pixelRatio={[1, 1.5]}
+      camera={{ position: [0, 3, 18] }}
     >
-      <Environment files={env} ground={{ height: 5, radius: 40, scale: 20 }} />
-      <OrbitControls
-        autoRotateSpeed={0.85}
-        zoomSpeed={0.75}
-        minPolarAngle={Math.PI / 2.5}
-        maxPolarAngle={Math.PI / 2.55}
+      <color attach="background" args={['black']} />
+
+      <OrbitControls />
+      <mesh rotation={[-0.5 * Math.PI, 0, 0]} position={[0, -10, 0]} receiveShadow>
+        <ambientLight intensity={0.6} />
+        <planeBufferGeometry args={[500, 500, 1, 1]} />
+        <shadowMaterial transparent opacity={0.2} />
+      </mesh>
+      <Stars radius={100} depth={50} count={15000} factor={2} saturation fade />
+      <hemisphereLight skyColor="black" groundColor="green" intensity={0.5} position={[0, 50, 0]} />
+      <directionalLight
+        position={[-8, 20, 8]}
+        shadow-camera-left={d * -1}
+        shadow-camera-bottom={d * -1}
+        shadow-camera-right={d}
+        shadow-camera-top={d}
+        shadow-camera-near={0.1}
+        shadow-camera-far={1500}
+        castShadow
       />
-      <Text font={200} position={[0.1, 1.5, 0.3]}>
+      <gridHelper args={[100, 100, `white`, `green`]} position={[0, -10, 0]} />
+
+      <Text font={200} position={[0.1, 1.5, 0.3]} color="black">
         HealthifyStudio
       </Text>
       <ExcerciseSelector
@@ -88,7 +106,7 @@ function Field({ onSceneChange }) {
         animation={animation}
         mouse={mouse}
         position={[0, -10, -17]}
-        scale={[0.05, 0.05, 0.05]}
+        scale={[0.08, 0.08, 0.08]}
       />
     </Canvas>
   );
