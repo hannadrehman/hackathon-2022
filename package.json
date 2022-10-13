@@ -15,14 +15,19 @@
     "@react-three/postprocessing": "2.4.6",
     "@types/three": "0.142.0",
     "leva": "0.9.29",
-    "three": "0.142.0"
+    "three": "0.142.0",
+    "gh-pages" : "*"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "rm -rf ./build&&react-scripts build && yarn mv",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "__predeploy": "npm run build",
+    "__deploy": "gh-pages -b gh-pages -d build",
+    "mv": "rm -rf ./docs && cp -R ./build ./docs && rm -rf ./build"
   },
+  "homepage": ".",
   "eslintConfig": {
     "extends": [
       "react-app",
