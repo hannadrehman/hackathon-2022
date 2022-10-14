@@ -135,16 +135,16 @@ function Field({ onSceneChange }) {
         Healthify Studio
       </Text>
 
-      {counter <= 10 && counter !== 0 && animation === "dance" && (
+      {counter <= 20 && counter !== 0 && animation === "dance" && (
         <PositionalAudio autoplay loop url="/music1.mp3" distance={5} />
       )}
-      {counter <= 10 &&
+      {counter <= 20 &&
         counter !== 0 &&
         animation === "jumprope" &&
         animation === "jump" && (
           <PositionalAudio autoplay loop url="/music2.mp3" distance={5} />
         )}
-      {counter <= 10 && counter !== 0 && (
+      {counter <= 20 && counter !== 0 && (
         <Text fontSize={2} position={[0, 9, -10]} color="white">
           {counter}
         </Text>
@@ -304,16 +304,16 @@ function Court({ onSceneChange }) {
         Healthify Studio
       </Text>
 
-      {counter <= 10 && counter !== 0 && animation === "dance" && (
+      {counter <= 20 && counter !== 0 && animation === "dance" && (
         <PositionalAudio autoplay loop url="/music1.mp3" distance={5} />
       )}
-      {counter <= 10 &&
+      {counter <= 20 &&
         counter !== 0 &&
         animation === "jumprope" &&
         animation === "jump" && (
           <PositionalAudio autoplay loop url="/music2.mp3" distance={5} />
         )}
-      {counter <= 10 && counter !== 0 && (
+      {counter <= 20 && counter !== 0 && (
         <Text fontSize={2} position={[0, 10, -10]} color="white">
           {counter}
         </Text>
