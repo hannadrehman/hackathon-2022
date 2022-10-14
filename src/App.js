@@ -179,10 +179,6 @@ function Field({ onSceneChange }) {
           Choose Exercise
         </Text>
       )}
-      <ExcerciseSelector
-        onAnimationChange={setAnimation}
-        animation={animation}
-      />
       {showExercise && counter === 0 && (
         <>
           <Text
