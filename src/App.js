@@ -140,8 +140,7 @@ function Field({ onSceneChange }) {
       )}
       {counter <= 20 &&
         counter !== 0 &&
-        animation === "jumprope" &&
-        animation === "jump" && (
+        (animation === "jumprope" || animation === "jump") && (
           <PositionalAudio autoplay loop url="/music2.mp3" distance={5} />
         )}
       {counter <= 20 && counter !== 0 && (
@@ -309,8 +308,7 @@ function Court({ onSceneChange }) {
       )}
       {counter <= 20 &&
         counter !== 0 &&
-        animation === "jumprope" &&
-        animation === "jump" && (
+        (animation === "jumprope" || animation === "jump") && (
           <PositionalAudio autoplay loop url="/music2.mp3" distance={5} />
         )}
       {counter <= 20 && counter !== 0 && (
