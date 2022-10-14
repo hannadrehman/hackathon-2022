@@ -160,7 +160,7 @@ function Court({ onSceneChange }) {
       }}
       onMouseMove={(e) => (mouse.current = getMousePos(e))}
       shadows
-      camera={{ position: [0, 0, 5], fov: 100 }}
+      camera={{ position: [0, 0, 5], fov: 30 }}
     >
       <fog attach="fog" args={["purple", 0, 130]} />
       <ambientLight intensity={0.1} />
@@ -204,7 +204,7 @@ function Court({ onSceneChange }) {
         lockX={false}
         lockY={false}
         lockZ={false} // Lock the rotation on the z axis (default=false)
-        position={[0, 5, -1.3]}
+        position={[-3, 5, -1.3]}
       >
         <Text fontSize={2} color="red">
           Healthify Studio
@@ -213,6 +213,7 @@ function Court({ onSceneChange }) {
           Studio
         </Text>
       </Billboard>
+
       {counter <= 10 && counter !== 0 && (
         <Text fontSize={2} position={[0, 10, -10]} color="white">
           {counter}
@@ -316,7 +317,6 @@ function Court({ onSceneChange }) {
           </Text>
         </Billboard>
       )}
-      <SceneSelector position={[1, 1, 1]} onChange={onSceneChange} />
       {showExercise && (
         <Stacy
           animation={animation}
