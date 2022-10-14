@@ -60,6 +60,33 @@ function Field({ onSceneChange }) {
   const d = 8.25;
   const mouse = useRef({ x: 0, y: 0 });
   const [animation, setAnimation] = useState("idle");
+  const [counter, setCounter] = useState(0);
+  const [startExercise, setStartExercise] = useState(false);
+  const [hoverStartExercise, setHoverStartExercise] = useState(false);
+  const [hoverJumpRope, setHoverJumpRope] = useState(false);
+  const [hoverDance, setHoverDance] = useState(false);
+  const [hoverJump, setHoverJump] = useState(false);
+  const [showExercise, setShowExercise] = useState(false);
+
+  useEffect(() => {
+    counter > 0 && setTimeout(() => setCounter(counter - 1), 1000);
+  }, [counter]);
+
+  useEffect(() => {
+    if (counter === 0) {
+      setAnimation(null);
+    }
+  }, [counter]);
+
+  function handleStartExercise() {
+    setStartExercise(true);
+    setShowExercise(true);
+  }
+
+  function handleAnimationSelection(value) {
+    setAnimation(value);
+    setCounter(10);
+  }
 
   return (
     <Canvas
@@ -103,14 +130,79 @@ function Field({ onSceneChange }) {
         castShadow
       />
       <gridHelper args={[100, 100, `white`, `green`]} position={[0, -10, 0]} />
-      <Text fontSize={2} position={[0.2, 5, -1.3]}>
+      <Text fontSize={2} color="red" position={[0, 10, -4]}>
         Healthify Studio
       </Text>
-      <ExcerciseSelector
-        animation={animation}
-        onAnimationChange={(e) => setAnimation(e)}
-      />
-      <SceneSelector position={[1, 1, 1]} onChange={onSceneChange} />
+
+      {counter <= 10 && counter !== 0 && (
+        <Text fontSize={2} position={[0, 9, -10]} color="white">
+          {counter}
+        </Text>
+      )}
+
+      <Billboard
+        follow={true}
+        lockX={false}
+        lockY={false}
+        lockZ={false} // Lock the rotation on the z axis (default=false)
+        position={[-20, -0.2, -0.3]}
+      >
+        <Text
+          fontSize={1}
+          color="red"
+          onClick={() => onSceneChange("home")}
+          curveSegments={32}
+        >
+          Exit
+        </Text>
+      </Billboard>
+      {!showExercise && (
+        <Text
+          onPointerOver={() => setHoverStartExercise(true)}
+          onPointerOut={() => setHoverStartExercise(false)}
+          fontSize={2}
+          position={[0, 0, -2]}
+          scale={hoverStartExercise ? [1.2, 1.2, 1.2] : [1, 1, 1]}
+          onClick={handleStartExercise}
+          color="white"
+        >
+          Choose Exercise
+        </Text>
+      )}
+      {showExercise && counter === 0 && (
+        <>
+          <Text
+            onPointerOver={() => setHoverJumpRope(true)}
+            onPointerOut={() => setHoverJumpRope(false)}
+            fontSize={0.8}
+            scale={hoverJumpRope ? [1.2, 1.2, 1.2] : [1, 1, 1]}
+            onClick={(e) => handleAnimationSelection("jumprope")}
+            position={[-6, 6, -4]}
+          >
+            Jump Rope
+          </Text>
+          <Text
+            onPointerOver={() => setHoverDance(true)}
+            onPointerOut={() => setHoverDance(false)}
+            fontSize={0.8}
+            scale={hoverDance ? [1.2, 1.2, 1.2] : [1, 1, 1]}
+            onClick={(e) => handleAnimationSelection("dance")}
+            position={[0, 6, -4]}
+          >
+            Dance
+          </Text>
+          <Text
+            onPointerOver={() => setHoverJump(true)}
+            onPointerOut={() => setHoverJump(false)}
+            fontSize={0.8}
+            scale={hoverJump ? [1.2, 1.2, 1.2] : [1, 1, 1]}
+            onClick={(e) => handleAnimationSelection("jump")}
+            position={[6, 6, -4]}
+          >
+            Jump
+          </Text>
+        </>
+      )}
       <Stacy
         animation={animation}
         mouse={mouse}
