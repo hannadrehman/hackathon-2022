@@ -10,6 +10,7 @@ import {
   Environment,
   BakeShadows,
   useGLTF,
+  Image,
 } from "@react-three/drei";
 import { useControls } from "leva";
 import { Stacy } from "./scenes/Stacy";
@@ -76,8 +77,8 @@ function Field({ onSceneChange }) {
         minPolarAngle={Math.PI / 2.5}
         maxPolarAngle={Math.PI / 2.55}
       />
-      <Text font={200} position={[0.1, 1.5, 0.3]}>
-        HealthifyStudio
+      <Text fontSize={2} position={[0.2, 5, -1.3]}>
+        Healthify Studio
       </Text>
       <ExcerciseSelector
         animation={animation}
@@ -133,6 +134,7 @@ function Court({ onSceneChange }) {
       }}
       onMouseMove={(e) => (mouse.current = getMousePos(e))}
       shadows
+      camera={{ position: [0, 0, 5], fov: 100 }}
     >
       <fog attach="fog" args={["purple", 0, 130]} />
       <ambientLight intensity={0.1} />
@@ -170,22 +172,35 @@ function Court({ onSceneChange }) {
         background
       />
       <BakeShadows />
-      <Text fontSize={2} position={[0.2, 5, -1.3]}>
-        Healthify Studio
+      <Text fontSize={2} position={[-3, 5, -1.3]} color="red">
+        Healthify
+      </Text>
+      <Text fontSize={2} position={[4, 5, -1.3]} color="white">
+        Studio
       </Text>
       {counter <= 10 && counter !== 0 && (
         <Text fontSize={2} position={[0, 10, -10]} color="white">
           {counter}
         </Text>
       )}
+      <Text
+        fontSize={1}
+        position={[-13, -0.2, -1.3]}
+        color="red"
+        onClick={() => onSceneChange("home")}
+        curveSegments={32}
+      >
+        Exit
+      </Text>
       {!showExercise && (
         <Text
           onPointerOver={() => setHoverStartExercise(true)}
           onPointerOut={() => setHoverStartExercise(false)}
           fontSize={2}
-          position={[0, 0, -10]}
+          position={[0, 0, -2]}
           scale={hoverStartExercise ? [1.2, 1.2, 1.2] : [1, 1, 1]}
           onClick={handleStartExercise}
+          color="white"
         >
           Choose Exercise
         </Text>
@@ -229,11 +244,6 @@ function Court({ onSceneChange }) {
           {counter}
         </Text>
       )}
-      <ExcerciseSelector
-        animation={animation}
-        onAnimationChange={(e) => setAnimation(e)}
-      />
-      <SceneSelector position={[1, 1, 1]} onChange={onSceneChange} />
       {showExercise && (
         <Stacy
           animation={animation}
@@ -246,8 +256,109 @@ function Court({ onSceneChange }) {
   );
 }
 
+function Home({ onSceneChange }) {
+  const mouse = useRef({ x: 0, y: 0 });
+  const [hoverCourtEnv, setHoverCourtEnv] = useState(false);
+  const [hoverFieldEnv, setHoverFieldEnv] = useState(false);
+
+  function handleEnvSelection(value) {
+    onSceneChange(value);
+  }
+
+  return (
+    <Canvas
+      vr="true"
+      onCreated={({ gl }) => {
+        document.body.appendChild(VRButton.createButton(gl));
+      }}
+      onMouseMove={(e) => (mouse.current = getMousePos(e))}
+      shadows
+      camera={{ position: [0, 0, 30], fov: 5 }}
+    >
+      <fog attach="fog" args={["purple", 0, 130]} />
+      <ambientLight intensity={0.1} />
+      <group position={[0, -2, 0]}>
+        <spotLight
+          castShadow
+          intensity={10}
+          angle={0.1}
+          position={[-200, 220, -100]}
+          shadow-mapSize={[2048, 2048]}
+          shadow-bias={-0.000001}
+        />
+        <spotLight
+          angle={0.1}
+          position={[-250, 120, -200]}
+          intensity={1}
+          castShadow
+          shadow-mapSize={[50, 50]}
+          shadow-bias={-0.000001}
+        />
+        <spotLight
+          angle={0.1}
+          position={[250, 120, 200]}
+          intensity={1}
+          castShadow
+          shadow-mapSize={[50, 50]}
+          shadow-bias={-0.000001}
+        />
+        <HomeBase />
+        <Floor />
+      </group>
+      <OrbitControls minPolarAngle={Math.PI / 2} maxPolarAngle={Math.PI / 2} />
+      <BakeShadows />
+      <Text fontSize={0.3} position={[0, 0.6, 0]} color="red">
+        Healthify
+      </Text>
+      <Text fontSize={0.2} position={[0, 0.4, 0]} color="grey">
+        Studio
+      </Text>
+      <Text
+        fontSize={0.2}
+        position={[1, -0.4, 0]}
+        color="black"
+        onPointerOver={() => setHoverCourtEnv(true)}
+        onPointerOut={() => setHoverCourtEnv(false)}
+        scale={hoverCourtEnv ? [1.2, 1.2, 1.2] : [1, 1, 1]}
+        onClick={(e) => handleEnvSelection("court")}
+      >
+        Court Feel
+      </Text>
+      <Text
+        fontSize={0.2}
+        position={[-1, -0.4, 0]}
+        color="black"
+        onPointerOver={() => setHoverFieldEnv(true)}
+        onPointerOut={() => setHoverCourtEnv(false)}
+        scale={hoverFieldEnv ? [1.2, 1.2, 1.2] : [1, 1, 1]}
+        onClick={(e) => handleEnvSelection("field")}
+      >
+        Field Feel
+      </Text>
+    </Canvas>
+  );
+}
+
 function CourtBase(props) {
   const { scene, nodes } = useGLTF("/court-transformed.glb");
+  useLayoutEffect(() => {
+    scene.traverse((o) => {
+      if (o.isMesh) {
+        if (o === nodes.GymFloor_ParquetShader_0) o.parent.remove(o);
+        else
+          applyProps(o, {
+            castShadow: true,
+            receiveShadow: true,
+            "material-envMapIntensity": 0.1,
+          });
+      }
+    });
+  }, [nodes.GymFloor_ParquetShader_0, scene]);
+  return <primitive object={scene} {...props} />;
+}
+
+function HomeBase(props) {
+  const { scene, nodes } = useGLTF("/dining_room__kichen_baked.glb");
   useLayoutEffect(() => {
     scene.traverse((o) => {
       if (o.isMesh) {
@@ -309,9 +420,10 @@ function Floor(props) {
 }
 
 export default function App() {
-  const [scene, setScene] = useState("field");
+  const [scene, setScene] = useState("home");
   return (
     <Fragment>
+      {scene === "home" && <Home onSceneChange={(name) => setScene(name)} />}
       {scene === "field" && <Field onSceneChange={(name) => setScene(name)} />}
       {scene === "court" && <Court onSceneChange={(name) => setScene(name)} />}
     </Fragment>
