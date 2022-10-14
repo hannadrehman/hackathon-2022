@@ -12,6 +12,7 @@ import {
   useGLTF,
   Stars,
   Billboard,
+  PositionalAudio,
 } from "@react-three/drei";
 import { useControls } from "leva";
 import { Stacy } from "./scenes/Stacy";
@@ -294,6 +295,9 @@ function Court({ onSceneChange }) {
         Healthify Studio
       </Text>
 
+      {counter <= 10 && counter !== 0 && (
+        <PositionalAudio autoplay loop url="/music1.mp3" distance={5} />
+      )}
       {counter <= 10 && counter !== 0 && (
         <Text fontSize={2} position={[0, 10, -10]} color="white">
           {counter}
