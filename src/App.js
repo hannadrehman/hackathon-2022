@@ -160,7 +160,7 @@ function Court({ onSceneChange }) {
       }}
       onMouseMove={(e) => (mouse.current = getMousePos(e))}
       shadows
-      camera={{ position: [0, 0, 5], fov: 80 }}
+      camera={{ position: [0, -8, 5], fov: 80 }}
     >
       <fog attach="fog" args={["purple", 0, 130]} />
       <ambientLight intensity={0.1} />
@@ -198,11 +198,8 @@ function Court({ onSceneChange }) {
         background
       />
       <BakeShadows />
-      <Text fontSize={2} color="red" position={[-3, 5, -1.3]}>
+      <Text fontSize={2} color="red" position={[0, 5, -4]}>
         Healthify Studio
-      </Text>
-      <Text fontSize={2} color="white" position={[4, 5, -1.3]}>
-        Studio
       </Text>
 
       {counter <= 10 && counter !== 0 && (
@@ -275,7 +272,7 @@ function Court({ onSceneChange }) {
         </>
       )}
       {counter <= 10 && counter !== 0 && (
-        <Text fontSize={1} color="white" position={[0, 2, -1]}>
+        <Text fontSize={1} color="white" position={[0, 2, -4]}>
           {counter}
         </Text>
       )}
