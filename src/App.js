@@ -251,7 +251,7 @@ function Court({ onSceneChange }) {
 
   function handleAnimationSelection(value) {
     setAnimation(value);
-    setCounter(10);
+    setCounter(20);
   }
 
   return (
