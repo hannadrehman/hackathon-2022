@@ -11,7 +11,7 @@ import {
   BakeShadows,
   useGLTF,
   Stars,
-  Billboard
+  Billboard,
 } from "@react-three/drei";
 import { useControls } from "leva";
 import { Stacy } from "./scenes/Stacy";
@@ -57,7 +57,7 @@ function ExcerciseSelector({ onAnimationChange, animation }) {
 }
 
 function Field({ onSceneChange }) {
-  const d = 8.25
+  const d = 8.25;
   const mouse = useRef({ x: 0, y: 0 });
   const [animation, setAnimation] = useState("idle");
 
@@ -73,16 +73,25 @@ function Field({ onSceneChange }) {
       pixelRatio={[1, 1.5]}
       camera={{ position: [0, 3, 18] }}
     >
-      <color attach="background" args={['black']} />
+      <color attach="background" args={["black"]} />
 
       <OrbitControls />
-      <mesh rotation={[-0.5 * Math.PI, 0, 0]} position={[0, -10, 0]} receiveShadow>
+      <mesh
+        rotation={[-0.5 * Math.PI, 0, 0]}
+        position={[0, -10, 0]}
+        receiveShadow
+      >
         <ambientLight intensity={0.6} />
         <planeBufferGeometry args={[500, 500, 1, 1]} />
         <shadowMaterial transparent opacity={0.2} />
       </mesh>
       <Stars radius={100} depth={50} count={15000} factor={2} saturation fade />
-      <hemisphereLight skyColor="black" groundColor="green" intensity={0.5} position={[0, 50, 0]} />
+      <hemisphereLight
+        skyColor="black"
+        groundColor="green"
+        intensity={0.5}
+        position={[0, 50, 0]}
+      />
       <directionalLight
         position={[-8, 20, 8]}
         shadow-camera-left={d * -1}
@@ -94,9 +103,8 @@ function Field({ onSceneChange }) {
         castShadow
       />
       <gridHelper args={[100, 100, `white`, `green`]} position={[0, -10, 0]} />
-
-      <Text font={200} position={[0.1, 1.5, 0.3]} color="black">
-        HealthifyStudio
+      <Text fontSize={2} position={[0.2, 5, -1.3]}>
+        Healthify Studio
       </Text>
       <ExcerciseSelector
         animation={animation}
@@ -152,8 +160,7 @@ function Court({ onSceneChange }) {
       }}
       onMouseMove={(e) => (mouse.current = getMousePos(e))}
       shadows
-      camera={{ position: [0, 3, 10] }}
-
+      camera={{ position: [0, 0, 5], fov: 100 }}
     >
       <fog attach="fog" args={["purple", 0, 130]} />
       <ambientLight intensity={0.1} />
@@ -191,15 +198,41 @@ function Court({ onSceneChange }) {
         background
       />
       <BakeShadows />
+
       <Billboard
         follow={true}
         lockX={false}
         lockY={false}
         lockZ={false} // Lock the rotation on the z axis (default=false)
-        position={[0.2, 5, -3]}
+        position={[0, 5, -1.3]}
       >
-        <Text fontSize={2} color="peru" weight="bold">
+        <Text fontSize={2} color="red">
           Healthify Studio
+        </Text>
+        <Text fontSize={2} color="white" position={[4, 5, -1.3]}>
+          Studio
+        </Text>
+      </Billboard>
+      {counter <= 10 && counter !== 0 && (
+        <Text fontSize={2} position={[0, 10, -10]} color="white">
+          {counter}
+        </Text>
+      )}
+
+      <Billboard
+        follow={true}
+        lockX={false}
+        lockY={false}
+        lockZ={false} // Lock the rotation on the z axis (default=false)
+        position={[-12, -0.2, -0.3]}
+      >
+        <Text
+          fontSize={1}
+          color="red"
+          onClick={() => onSceneChange("home")}
+          curveSegments={32}
+        >
+          Exit
         </Text>
       </Billboard>
       {!showExercise && (
@@ -207,9 +240,10 @@ function Court({ onSceneChange }) {
           onPointerOver={() => setHoverStartExercise(true)}
           onPointerOut={() => setHoverStartExercise(false)}
           fontSize={2}
-          position={[0, 0, -10]}
+          position={[0, 0, -2]}
           scale={hoverStartExercise ? [1.2, 1.2, 1.2] : [1, 1, 1]}
           onClick={handleStartExercise}
+          color="white"
         >
           Choose Exercise
         </Text>
@@ -223,7 +257,6 @@ function Court({ onSceneChange }) {
             lockZ={false} // Lock the rotation on the z axis (default=false)
             position={[-6, 2, -1]}
           >
-
             <Text
               onPointerOver={() => setHoverJumpRope(true)}
               onPointerOut={() => setHoverJumpRope(false)}
@@ -241,7 +274,6 @@ function Court({ onSceneChange }) {
             lockZ={false} // Lock the rotation on the z axis (default=false)
             position={[0, 2, -1]}
           >
-
             <Text
               onPointerOver={() => setHoverDance(true)}
               onPointerOut={() => setHoverDance(false)}
@@ -259,7 +291,6 @@ function Court({ onSceneChange }) {
             lockZ={false} // Lock the rotation on the z axis (default=false)
             position={[6, 2, -1]}
           >
-
             <Text
               onPointerOver={() => setHoverJump(true)}
               onPointerOut={() => setHoverJump(false)}
@@ -280,8 +311,7 @@ function Court({ onSceneChange }) {
           lockZ={false} // Lock the rotation on the z axis (default=false)
           position={[0, 2, -1]}
         >
-          <Text fontSize={1}
-            color="white">
+          <Text fontSize={1} color="white">
             {counter}
           </Text>
         </Billboard>
@@ -299,8 +329,109 @@ function Court({ onSceneChange }) {
   );
 }
 
+function Home({ onSceneChange }) {
+  const mouse = useRef({ x: 0, y: 0 });
+  const [hoverCourtEnv, setHoverCourtEnv] = useState(false);
+  const [hoverFieldEnv, setHoverFieldEnv] = useState(false);
+
+  function handleEnvSelection(value) {
+    onSceneChange(value);
+  }
+
+  return (
+    <Canvas
+      vr="true"
+      onCreated={({ gl }) => {
+        document.body.appendChild(VRButton.createButton(gl));
+      }}
+      onMouseMove={(e) => (mouse.current = getMousePos(e))}
+      shadows
+      camera={{ position: [0, 0, 30], fov: 5 }}
+    >
+      <fog attach="fog" args={["purple", 0, 130]} />
+      <ambientLight intensity={0.1} />
+      <group position={[0, -2, 0]}>
+        <spotLight
+          castShadow
+          intensity={10}
+          angle={0.1}
+          position={[-200, 220, -100]}
+          shadow-mapSize={[2048, 2048]}
+          shadow-bias={-0.000001}
+        />
+        <spotLight
+          angle={0.1}
+          position={[-250, 120, -200]}
+          intensity={1}
+          castShadow
+          shadow-mapSize={[50, 50]}
+          shadow-bias={-0.000001}
+        />
+        <spotLight
+          angle={0.1}
+          position={[250, 120, 200]}
+          intensity={1}
+          castShadow
+          shadow-mapSize={[50, 50]}
+          shadow-bias={-0.000001}
+        />
+        <HomeBase />
+        <Floor />
+      </group>
+      <OrbitControls minPolarAngle={Math.PI / 2} maxPolarAngle={Math.PI / 2} />
+      <BakeShadows />
+      <Text fontSize={0.3} position={[0, 0.6, 0]} color="red">
+        Healthify
+      </Text>
+      <Text fontSize={0.2} position={[0, 0.4, 0]} color="grey">
+        Studio
+      </Text>
+      <Text
+        fontSize={0.2}
+        position={[1, -0.4, 0]}
+        color="black"
+        onPointerOver={() => setHoverCourtEnv(true)}
+        onPointerOut={() => setHoverCourtEnv(false)}
+        scale={hoverCourtEnv ? [1.2, 1.2, 1.2] : [1, 1, 1]}
+        onClick={(e) => handleEnvSelection("court")}
+      >
+        Court Feel
+      </Text>
+      <Text
+        fontSize={0.2}
+        position={[-1, -0.4, 0]}
+        color="black"
+        onPointerOver={() => setHoverFieldEnv(true)}
+        onPointerOut={() => setHoverCourtEnv(false)}
+        scale={hoverFieldEnv ? [1.2, 1.2, 1.2] : [1, 1, 1]}
+        onClick={(e) => handleEnvSelection("field")}
+      >
+        Field Feel
+      </Text>
+    </Canvas>
+  );
+}
+
 function CourtBase(props) {
   const { scene, nodes } = useGLTF("/court-transformed.glb");
+  useLayoutEffect(() => {
+    scene.traverse((o) => {
+      if (o.isMesh) {
+        if (o === nodes.GymFloor_ParquetShader_0) o.parent.remove(o);
+        else
+          applyProps(o, {
+            castShadow: true,
+            receiveShadow: true,
+            "material-envMapIntensity": 0.1,
+          });
+      }
+    });
+  }, [nodes.GymFloor_ParquetShader_0, scene]);
+  return <primitive object={scene} {...props} />;
+}
+
+function HomeBase(props) {
+  const { scene, nodes } = useGLTF("/dining_room__kichen_baked.glb");
   useLayoutEffect(() => {
     scene.traverse((o) => {
       if (o.isMesh) {
@@ -362,9 +493,10 @@ function Floor(props) {
 }
 
 export default function App() {
-  const [scene, setScene] = useState("field");
+  const [scene, setScene] = useState("home");
   return (
     <Fragment>
+      {scene === "home" && <Home onSceneChange={(name) => setScene(name)} />}
       {scene === "field" && <Field onSceneChange={(name) => setScene(name)} />}
       {scene === "court" && <Court onSceneChange={(name) => setScene(name)} />}
     </Fragment>
