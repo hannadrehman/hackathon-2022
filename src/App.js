@@ -160,7 +160,7 @@ function Court({ onSceneChange }) {
       }}
       onMouseMove={(e) => (mouse.current = getMousePos(e))}
       shadows
-      camera={{ position: [0, 0, 5], fov: 30 }}
+      camera={{ position: [0, 0, 5], fov: 80 }}
     >
       <fog attach="fog" args={["purple", 0, 130]} />
       <ambientLight intensity={0.1} />
@@ -198,21 +198,12 @@ function Court({ onSceneChange }) {
         background
       />
       <BakeShadows />
-
-      <Billboard
-        follow={true}
-        lockX={false}
-        lockY={false}
-        lockZ={false} // Lock the rotation on the z axis (default=false)
-        position={[-3, 5, -1.3]}
-      >
-        <Text fontSize={2} color="red">
-          Healthify Studio
-        </Text>
-        <Text fontSize={2} color="white" position={[4, 5, -1.3]}>
-          Studio
-        </Text>
-      </Billboard>
+      <Text fontSize={2} color="red" position={[-3, 5, -1.3]}>
+        Healthify Studio
+      </Text>
+      <Text fontSize={2} color="white" position={[4, 5, -1.3]}>
+        Studio
+      </Text>
 
       {counter <= 10 && counter !== 0 && (
         <Text fontSize={2} position={[0, 10, -10]} color="white">
@@ -251,77 +242,48 @@ function Court({ onSceneChange }) {
       )}
       {showExercise && counter === 0 && (
         <>
-          <Billboard
-            follow={true}
-            lockX={false}
-            lockY={false}
-            lockZ={false} // Lock the rotation on the z axis (default=false)
-            position={[-6, 2, -1]}
+          <Text
+            onPointerOver={() => setHoverJumpRope(true)}
+            onPointerOut={() => setHoverJumpRope(false)}
+            fontSize={0.8}
+            scale={hoverJumpRope ? [1.2, 1.2, 1.2] : [1, 1, 1]}
+            onClick={(e) => handleAnimationSelection("jumprope")}
+            position={[-6, 2, -4]}
           >
-            <Text
-              onPointerOver={() => setHoverJumpRope(true)}
-              onPointerOut={() => setHoverJumpRope(false)}
-              fontSize={0.8}
-              scale={hoverJumpRope ? [1.2, 1.2, 1.2] : [1, 1, 1]}
-              onClick={(e) => handleAnimationSelection("jumprope")}
-            >
-              Jump Rope
-            </Text>
-          </Billboard>
-          <Billboard
-            follow={true}
-            lockX={false}
-            lockY={false}
-            lockZ={false} // Lock the rotation on the z axis (default=false)
-            position={[0, 2, -1]}
+            Jump Rope
+          </Text>
+          <Text
+            onPointerOver={() => setHoverDance(true)}
+            onPointerOut={() => setHoverDance(false)}
+            fontSize={0.8}
+            scale={hoverDance ? [1.2, 1.2, 1.2] : [1, 1, 1]}
+            onClick={(e) => handleAnimationSelection("dance")}
+            position={[0, 2, -4]}
           >
-            <Text
-              onPointerOver={() => setHoverDance(true)}
-              onPointerOut={() => setHoverDance(false)}
-              fontSize={0.8}
-              scale={hoverDance ? [1.2, 1.2, 1.2] : [1, 1, 1]}
-              onClick={(e) => handleAnimationSelection("dance")}
-            >
-              Dance
-            </Text>
-          </Billboard>
-          <Billboard
-            follow={true}
-            lockX={false}
-            lockY={false}
-            lockZ={false} // Lock the rotation on the z axis (default=false)
-            position={[6, 2, -1]}
+            Dance
+          </Text>
+          <Text
+            onPointerOver={() => setHoverJump(true)}
+            onPointerOut={() => setHoverJump(false)}
+            fontSize={0.8}
+            scale={hoverJump ? [1.2, 1.2, 1.2] : [1, 1, 1]}
+            onClick={(e) => handleAnimationSelection("jump")}
+            position={[6, 2, -4]}
           >
-            <Text
-              onPointerOver={() => setHoverJump(true)}
-              onPointerOut={() => setHoverJump(false)}
-              fontSize={0.8}
-              scale={hoverJump ? [1.2, 1.2, 1.2] : [1, 1, 1]}
-              onClick={(e) => handleAnimationSelection("jump")}
-            >
-              Jump
-            </Text>
-          </Billboard>
+            Jump
+          </Text>
         </>
       )}
       {counter <= 10 && counter !== 0 && (
-        <Billboard
-          follow={true}
-          lockX={false}
-          lockY={false}
-          lockZ={false} // Lock the rotation on the z axis (default=false)
-          position={[0, 2, -1]}
-        >
-          <Text fontSize={1} color="white">
-            {counter}
-          </Text>
-        </Billboard>
+        <Text fontSize={1} color="white" position={[0, 2, -1]}>
+          {counter}
+        </Text>
       )}
       {showExercise && (
         <Stacy
           animation={animation}
           mouse={mouse}
-          position={[0, -1.6, 1]}
+          position={[0, -1.5, -4]}
           scale={[0.012, 0.012, 0.012]}
         />
       )}
