@@ -10,7 +10,7 @@ import {
   Environment,
   BakeShadows,
   useGLTF,
-  Image,
+  Billboard,
 } from "@react-three/drei";
 import { useControls } from "leva";
 import { Stacy } from "./scenes/Stacy";
@@ -183,15 +183,23 @@ function Court({ onSceneChange }) {
           {counter}
         </Text>
       )}
-      <Text
-        fontSize={1}
-        position={[-13, -0.2, -1.3]}
-        color="red"
-        onClick={() => onSceneChange("home")}
-        curveSegments={32}
+
+      <Billboard
+        follow={true}
+        lockX={false}
+        lockY={false}
+        lockZ={false} // Lock the rotation on the z axis (default=false)
+        position={[-12, -0.2, -0.3]}
       >
-        Exit
-      </Text>
+        <Text
+          fontSize={1}
+          color="red"
+          onClick={() => onSceneChange("home")}
+          curveSegments={32}
+        >
+          Exit
+        </Text>
+      </Billboard>
       {!showExercise && (
         <Text
           onPointerOver={() => setHoverStartExercise(true)}
